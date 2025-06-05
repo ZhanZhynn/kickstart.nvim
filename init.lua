@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -198,6 +198,31 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- [[ Custom Keymaps ]]
+vim.keymap.set('n', '<leader>p', vim.cmd.Ex, { desc = 'File explorer' })
+
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move text down' })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move text up' })
+
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+
+vim.keymap.set('n', 'n', 'nzz')
+vim.keymap.set('n', 'N', 'Nzz')
+
+vim.keymap.set('n', 'J', '5j')
+vim.keymap.set('n', 'K', '5k')
+
+vim.keymap.set('n', 'gh', vim.lsp.buf.hover, { desc = 'Hover documentation' })
+
+vim.keymap.set('n', '<leader>J', 'mzJ`z', { desc = 'Keep cursor position and join lines' })
+
+vim.keymap.set('n', '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Yank selection to system clipboard' })
+vim.keymap.set('n', '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
+
+vim.diagnostic.config { virtual_text = true }
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -684,6 +709,74 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
+        -- https://dev.to/danwalsh/solved-vue-3-typescript-inlay-hint-support-in-neovim-53ej
+        vim.lsp.config('vue_ls', {
+          -- add filetypes for typescript, javascript and vue
+          filetypes = { 'vue' },
+          init_options = {
+            vue = {
+              -- disable hybrid mode
+              hybridMode = false,
+            },
+          },
+          settings = {
+            typescript = {
+              inlayHints = {
+                enumMemberValues = {
+                  enabled = true,
+                },
+                functionLikeReturnTypes = {
+                  enabled = true,
+                },
+                propertyDeclarationTypes = {
+                  enabled = true,
+                },
+                parameterTypes = {
+                  enabled = true,
+                  suppressWhenArgumentMatchesName = true,
+                },
+                variableTypes = {
+                  enabled = true,
+                },
+              },
+            },
+          },
+        }),
+
+        vim.lsp.config('ts_ls', {
+          init_options = {
+            plugins = {
+              {
+                name = '@vue/typescript-plugin',
+                location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+                languages = { 'vue' },
+              },
+            },
+          },
+          filetypes = {
+            'javascript',
+            'typescript',
+            'vue',
+          },
+          settings = {
+            typescript = {
+              tsserver = {
+                useSyntaxServer = false,
+              },
+              inlayHints = {
+                includeInlayParameterNameHints = 'all',
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          },
+        }),
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -769,10 +862,15 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+        typescript = { "prettierd", "prettier", stop_after_first = true },
+        vue = { "prettierd", "prettier", stop_after_first = true },
+        css = { "prettierd", "prettier", stop_after_first = true },
+        scss = { "prettierd", "prettier", stop_after_first = true },
+      
       },
     },
   },
@@ -974,17 +1072,17 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
