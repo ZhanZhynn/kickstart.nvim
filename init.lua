@@ -714,38 +714,38 @@ require('lazy').setup({
         --
 
         -- https://dev.to/danwalsh/solved-vue-3-typescript-inlay-hint-support-in-neovim-53ej
-        vim.lsp.config('vue_ls', {
-          -- add filetypes for typescript, javascript and vue
-          filetypes = { 'vue' },
-          init_options = {
-            vue = {
-              -- disable hybrid mode
-              hybridMode = false,
-            },
-          },
-          settings = {
-            typescript = {
-              inlayHints = {
-                enumMemberValues = {
-                  enabled = true,
-                },
-                functionLikeReturnTypes = {
-                  enabled = true,
-                },
-                propertyDeclarationTypes = {
-                  enabled = true,
-                },
-                parameterTypes = {
-                  enabled = true,
-                  suppressWhenArgumentMatchesName = true,
-                },
-                variableTypes = {
-                  enabled = true,
-                },
-              },
-            },
-          },
-        }),
+        -- vim.lsp.config('vue_ls', {
+        --   -- add filetypes for typescript, javascript and vue
+        --   filetypes = { 'vue' },
+        --   init_options = {
+        --     vue = {
+        --       -- disable hybrid mode
+        --       hybridMode = false,
+        --     },
+        --   },
+        --   settings = {
+        --     typescript = {
+        --       inlayHints = {
+        --         enumMemberValues = {
+        --           enabled = true,
+        --         },
+        --         functionLikeReturnTypes = {
+        --           enabled = true,
+        --         },
+        --         propertyDeclarationTypes = {
+        --           enabled = true,
+        --         },
+        --         parameterTypes = {
+        --           enabled = true,
+        --           suppressWhenArgumentMatchesName = true,
+        --         },
+        --         variableTypes = {
+        --           enabled = true,
+        --         },
+        --       },
+        --     },
+        --   },
+        -- }),
 
         vim.lsp.config('ts_ls', {
           init_options = {
@@ -760,6 +760,8 @@ require('lazy').setup({
           filetypes = {
             'javascript',
             'typescript',
+            'javascriptreact',
+            'typescriptreact',
             'vue',
           },
           settings = {
@@ -781,6 +783,7 @@ require('lazy').setup({
           },
         }),
 
+        vim.lsp.config('vue_ls', {}),
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
