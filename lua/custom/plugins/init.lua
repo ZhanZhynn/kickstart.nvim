@@ -5,6 +5,14 @@
 return {
   -- { 'mason-org/mason.nvim', version = '^1.0.0' },
   -- { 'mason-org/mason-lspconfig.nvim', version = '^1.0.0' },
+  {
+    'OXY2DEV/markview.nvim',
+    lazy = false,
+
+    -- Completion for `blink.cmp`
+    -- dependencies = { "saghen/blink.cmp" },
+  },
+
   -- fuzzy lsp matcher
   {
     'saghen/blink.cmp',
